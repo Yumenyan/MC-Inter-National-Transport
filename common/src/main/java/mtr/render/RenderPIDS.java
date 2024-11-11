@@ -267,24 +267,25 @@ public class RenderPIDS<T extends BlockEntityMapper> extends BlockEntityRenderer
 					} else {
 						// Render arrival
 						final Component arrivalText;
-						// Get arrival time
 						final int seconds = (int) ((currentSchedule.arrivalMillis - System.currentTimeMillis()) / 1000);
-						if (seconds >= 60) {
-							if ((arrivalLine == 1 && renderVertical) || (arrivalLine == 0 && renderSingle) || renderClassic) {
-								arrivalText = Text.translatable(isCJK ? "gui.mtr.arrival_min_cjk" : "gui.mtr.arrival_min", seconds / 60).append(appendDotAfterMin && !isCJK ? "." : "");
-							} else {
-								arrivalText = Text.literal("");
-							}
+						// Get arrival time
+						final long gameTime = entity.getLevel().getGameTime();
+						final long arrivalTimeMillis = currentSchedule.arrivalMillis;
+
+						// Convert arrival time to hours and minutes
+						Calendar calendar = Calendar.getInstance();
+						calendar.setTimeInMillis(arrivalTimeMillis);
+						int hours = calendar.get(Calendar.HOUR_OF_DAY);
+						int minutes = calendar.get(Calendar.MINUTE);
+
+						if ((arrivalLine == 1 && renderVertical) || (arrivalLine == 0 && renderSingle) || renderClassic) {
+							arrivalText = Text.literal(String.format("%02d:%02d", hours, minutes));
 						} else {
-							if ((arrivalLine == 1 && renderVertical) || (arrivalLine == 0 && renderSingle) || renderClassic) {
-								arrivalText = seconds > 0 ? Text.translatable(isCJK ? "gui.mtr.arrival_sec_cjk" : "gui.mtr.arrival_sec", seconds).append(appendDotAfterMin && !isCJK ? "." : "") : null;
-							} else {
-								arrivalText = Text.literal("");
-							}
+							arrivalText = Text.literal("");
 						}
 
 						// Get car length text
-						final Component carText;
+						Component carText;
 						if ((arrivalLine == 1 && renderVertical) || (arrivalLine == 15 && renderSingle) || renderClassic) {
 							carText = Text.translatable(isCJK ? "gui.mtr.arrival_car_cjk" : "gui.mtr.arrival_car", currentSchedule.trainCars);
 						} else {
@@ -292,7 +293,24 @@ public class RenderPIDS<T extends BlockEntityMapper> extends BlockEntityRenderer
 						}
 
 						// Get calling at text
-						final Component callingAtText;
+						Component callingAtText;
+						if (renderSingle && arrivalLine == 3) {
+							if (stations.size() > 0) {
+								callingAtText = Text.translatable(isCJK ? "gui.mtr.calling_at_cjk" : "gui.mtr.calling_at", callingAtPage + 1, callingAtMaxPages);
+							} else {
+								callingAtText = Text.translatable(isCJK ? "gui.mtr.terminates_here_cjk" : "gui.mtr.terminates_here_1");
+							}
+						} else {
+							callingAtText = Text.literal("");
+						}
+						// Get car length text
+						if ((arrivalLine == 1 && renderVertical) || (arrivalLine == 15 && renderSingle) || renderClassic) {
+							carText = Text.translatable(isCJK ? "gui.mtr.arrival_car_cjk" : "gui.mtr.arrival_car", currentSchedule.trainCars);
+						} else {
+							carText = Text.literal("");
+						}
+
+						// Get calling at text
 						if (renderSingle && arrivalLine == 3) {
 							if (stations.size() > 0) {
 								callingAtText = Text.translatable(isCJK ? "gui.mtr.calling_at_cjk" : "gui.mtr.calling_at", callingAtPage + 1, callingAtMaxPages);

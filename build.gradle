@@ -9,7 +9,7 @@ plugins {
 	id "com.github.johnrengelman.shadow" version "7.1.0" apply false
 }
 
-def default_minecraft_version = "1.16.5"
+def default_minecraft_version = "1.19.2"
 def minecraft_version = rootProject.properties.containsKey("buildVersion") ? rootProject.getProperties().get("buildVersion").toString() : default_minecraft_version
 def minecraft_main_version = minecraft_version.split("\\.")[1] as int
 def patreon_api_key = rootProject.properties.containsKey("patreonApiKey") ? rootProject.getProperties().get("patreonApiKey").toString() : ""
@@ -93,19 +93,6 @@ task setupFiles() {
 		overwrite true
 		retries - 1
 	}
-	copy {
-		outputs.upToDateWhen { false }
-		from(zipTree("common/src/main/java/mtr/mappings/mappings.zip")) { eachFile { file -> file.relativePath = new RelativePath(true, file.relativePath.segments.drop(1) as String[]) } }
-		into "common/src/main/java/mtr/mappings"
-		filter(ReplaceTokens, tokens: ["package": "mtr.mappings"])
-	}
-	ant.path { ant.fileset(dir: "common/src/main/java/mtr/mappings", includes: "Fabric*.java") }.list().each {
-		ant.move(file: it, todir: "fabric/src/main/java/mtr/mappings")
-	}
-	ant.path { ant.fileset(dir: "common/src/main/java/mtr/mappings", includes: "Forge*.java") }.list().each {
-		ant.move(file: it, todir: "forge/src/main/java/mtr/mappings")
-	}
-
 	delete fileTree("common/src/main/resources/assets/mtr/sounds")
 	delete fileTree("common/src/main/resources/assets/mtr/textures")
 	delete fileTree("common/src/main/resources/assets/mtr/website")
@@ -128,7 +115,7 @@ task setupFiles() {
 	}
 	if (rootProject.variation == "normal" || rootProject.variation == "server") {
 		download {
-			src "https://unpkg.com/fabric/dist/fabric.min.js"
+			src "https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"
 			dest "common/src/main/resources/assets/mtr/website/fabric.min.js"
 			overwrite true
 			retries - 1
@@ -160,19 +147,6 @@ task setupFiles() {
 		from "resources/forge/" + (rootProject.variation == "lifts" ? "lifts" : "normal")
 		into "forge/src/main/resources"
 	}
-
-	download {
-		src "https://crowdin.com/backend/download/project/minecraft-transit-railway.zip"
-		dest "common/src/main/java/mtr/mappings/lang.zip"
-		overwrite true
-		retries - 1
-	}
-	copy {
-		outputs.upToDateWhen { false }
-		from(zipTree("common/src/main/java/mtr/mappings/lang.zip"))
-		into "common/src/main/resources/assets/mtr/lang"
-	}
-
 	copy {
 		outputs.upToDateWhen { false }
 		from "common/src/main/KeysTemplate.java"
