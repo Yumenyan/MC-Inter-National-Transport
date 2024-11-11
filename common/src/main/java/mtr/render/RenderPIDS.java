@@ -266,7 +266,7 @@ public class RenderPIDS<T extends BlockEntityMapper> extends BlockEntityRenderer
 						textRenderer.draw(matrices, destinationString, 0, 0, textColor);
 					} else {
 						// Render arrival
-						final Component arrivalText;
+						Component arrivalText = null;
 						final int seconds = (int) ((currentSchedule.arrivalMillis - System.currentTimeMillis()) / 1000);
 						// Get arrival time
 						final long gameTime = entity.getLevel().getGameTime();
@@ -278,12 +278,18 @@ public class RenderPIDS<T extends BlockEntityMapper> extends BlockEntityRenderer
 						int hours = calendar.get(Calendar.HOUR_OF_DAY);
 						int minutes = calendar.get(Calendar.MINUTE);
 
+						// Display remaining time in seconds for the first row
 						if ((arrivalLine == 1 && renderVertical) || (arrivalLine == 0 && renderSingle) || renderClassic) {
-							arrivalText = Text.literal(String.format("%02d:%02d", hours, minutes));
+							if(seconds < 1){
+								arrivalText = Text.literal("");
+							}else if (seconds < 20) {
+								arrivalText = Text.translatable((isCJK ? "gui.mtr.pids_soon_cjk" : "gui.mtr.pids_soon"), 0, 0, textColor);
+							} else {
+								arrivalText = Text.literal(String.format("%02d:%02d", hours, minutes));
+							}
 						} else {
 							arrivalText = Text.literal("");
 						}
-
 						// Get car length text
 						Component carText;
 						if ((arrivalLine == 1 && renderVertical) || (arrivalLine == 15 && renderSingle) || renderClassic) {

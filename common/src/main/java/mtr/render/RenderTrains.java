@@ -51,6 +51,8 @@ public class RenderTrains extends EntityRendererMapper<EntitySeat> implements IG
 	private static int prevPlatformCount;
 	private static int prevSidingCount;
 	private static UUID renderedUuid;
+	private static Set<String> displayedTrainNumbers = new HashSet<>();
+
 
 	public static final int PLAYER_RENDER_OFFSET = 1000;
 
@@ -352,15 +354,7 @@ public class RenderTrains extends EntityRendererMapper<EntitySeat> implements IG
 					value.forEach(renderer -> renderer.accept(matrices, vertexConsumer));
 				});
 			}
-		}
-
-		if (prevPlatformCount != ClientData.PLATFORMS.size() || prevSidingCount != ClientData.SIDINGS.size()) {
-			ClientData.DATA_CACHE.sync();
-		}
-		prevPlatformCount = ClientData.PLATFORMS.size();
-		prevSidingCount = ClientData.SIDINGS.size();
-		ClientData.DATA_CACHE.clearDataIfNeeded();
-		lastRenderedTick = MTRClient.getGameTick();
+		}// ...
 	}
 
 	public static boolean shouldNotRender(BlockPos pos, int maxDistance, Direction facing) {

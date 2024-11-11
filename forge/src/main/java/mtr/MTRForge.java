@@ -42,7 +42,7 @@ public class MTRForge {
 	}
 
 	public MTRForge() {
-		final IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+  final IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		ForgeUtilities.registerModEventBus(MTR.MOD_ID, eventBus);
 
 		ITEMS.register();

@@ -86,13 +86,7 @@ task setupFiles() {
 	System.out.println("Mod Menu: " + rootProject.mod_menu_data[0])
 	System.out.println("Architectury: " + rootProject.architectury_data[0].split("\\+")[0])
 	System.out.println("Parchment: " + parchment_version)
-
-	download {
-		src "https://github.com/jonafanho/Minecraft-Mappings/archive/refs/heads/${is_1_19_3 ? minecraft_version : "1." + minecraft_main_version}.zip"
-		dest "common/src/main/java/mtr/mappings/mappings.zip"
-		overwrite true
-		retries - 1
-	}
+	
 	delete fileTree("common/src/main/resources/assets/mtr/sounds")
 	delete fileTree("common/src/main/resources/assets/mtr/textures")
 	delete fileTree("common/src/main/resources/assets/mtr/website")
