@@ -50,7 +50,7 @@ public class SidingScreen extends SavedRailScreenBase<Siding> implements Icons {
 	private static final int MAX_TRAINS_TEXT_LENGTH = 3;
 	private static final int MAX_TRAINS_WIDTH = 80;
 	private static final int DESCRIPTION_WIDTH = 160;
-	private static final int SLIDER_SCALE = 1000;
+	private static final int SLIDER_SCALE = 2000;
 	private static final float ACCELERATION_UNIT_CONVERSION_1 = 20 * 20; // m/tick^2 to m/s^2
 	private static final float ACCELERATION_UNIT_CONVERSION_2 = ACCELERATION_UNIT_CONVERSION_1 * 3.6F; // m/tick^2 to km/h/s
 	private static final Map<String, String> WIKIPEDIA_ARTICLES = new HashMap<>();
