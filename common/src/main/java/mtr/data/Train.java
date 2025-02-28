@@ -404,7 +404,7 @@ public abstract class Train extends NameColorDataBase implements IPacket {
 		}
 		return railSpeed;
 	}
-
+	public double stoppingDistance;
 	public final boolean isPlayerRiding(Player player) {
 		return ridingEntities.contains(player.getUUID());
 	}
@@ -509,8 +509,7 @@ public abstract class Train extends NameColorDataBase implements IPacket {
 							}
 						}
 
-						final double stoppingDistance = distances.get(nextStoppingIndex) - railProgress;
-
+						stoppingDistance = distances.get(nextStoppingIndex) - railProgress;
 							if (isCurrentlyManual) {
 								if (manualNotch >= -2) {
 									final RailType railType = convertMaxManualSpeed(maxManualSpeed);
@@ -519,18 +518,23 @@ public abstract class Train extends NameColorDataBase implements IPacket {
 							} else {
 								final float railSpeed = getRailSpeed(getIndex(0, spacing, false));
 								final float rail2 = getRailSpeed((getIndex(0, spacing, false ) >= path.size() - 1) ? (getIndex(0, spacing, false)) : getIndex(0, spacing, false) + 1);
-								if (0.625 * speed * speed / accelerationConstant < stoppingDistance && Math.abs(rail2 - speed) > 1) {
-									if (speed < railSpeed) {
-										speed = Math.min(speed + newAcceleration, railSpeed);
-										manualNotch = 2;
-									} else if (speed > railSpeed) {
-										speed = Math.max(speed - newAcceleration, railSpeed);
-										manualNotch = -2;
+								if (0.55 * speed * speed / accelerationConstant < stoppingDistance && Math.abs(rail2 - speed) > 1) {
+									if (!transportMode.continuousMovement && stoppingDistance < 0.5 * speed * speed / accelerationConstant){
+										speed = stoppingDistance <= 0 ? Train.ACCELERATION_DEFAULT : (float) Math.max(speed - (0.5 * speed * speed / stoppingDistance) * ticksElapsed, Train.ACCELERATION_DEFAULT);
+										manualNotch = -3;
 									} else {
-										manualNotch = 0;
+										if (speed < railSpeed) {
+											speed = Math.min(speed + newAcceleration, railSpeed);
+											manualNotch = 2;
+										} else if (speed > railSpeed) {
+											speed = Math.max(speed - newAcceleration, railSpeed);
+											manualNotch = -2;
+										} else {
+											manualNotch = 0;
+										}
 									}
 								} else {
-									if (!transportMode.continuousMovement && stoppingDistance / 3 < 0.5 * speed * speed / accelerationConstant){
+									if (!transportMode.continuousMovement && stoppingDistance < 0.5 * speed * speed / accelerationConstant){
 										speed = stoppingDistance <= 0 ? Train.ACCELERATION_DEFAULT : (float) Math.max(speed - (0.5 * speed * speed / stoppingDistance) * ticksElapsed, Train.ACCELERATION_DEFAULT);
 										manualNotch = -3;
 									} else {
@@ -543,7 +547,7 @@ public abstract class Train extends NameColorDataBase implements IPacket {
 					}
 
 					railProgress += speed * ticksElapsed;
-					if (!transportMode.continuousMovement && railProgress > distances.get(nextStoppingIndex)) {
+					if (!transportMode.continuousMovement && railProgress > distances.get(nextStoppingIndex)){
 						railProgress = distances.get(nextStoppingIndex);
 						speed = 0;
 						manualNotch = -2;

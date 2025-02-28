@@ -155,7 +155,7 @@ public class UpdateSolder {
 				dependenciesModrinth.put(modLoader == ModLoader.FABRIC ? "P7dR8mSH" : "lhGA9TYQ", DependencyType.REQUIRED);
 				while (true) {
 					final boolean[] success = {false};
-					NetworkUtils.openConnectionSafe(urlMtr, inputStream -> success[0] = new ModId("XKPAmI6u", ModProvider.MODRINTH).uploadFile("Minecraft Transit Railway", modVersionMtr.toUpperCase(Locale.ENGLISH), "See Discord", dependenciesModrinth, ReleaseStatus.BETA, Collections.singleton(minecraftVersion), Collections.singleton(modLoader), false, inputStream, fileNameMtr, modrinthApiKey));
+					NetworkUtils.openConnectionSafe(urlMtr, inputStream -> success[0] = new ModId("XKPAmI6u", ModProvider.MODRINTH).uploadFile("MTR", modVersionMtr.toUpperCase(Locale.ENGLISH), "See Discord", dependenciesModrinth, ReleaseStatus.BETA, Collections.singleton(minecraftVersion), Collections.singleton(modLoader), false, inputStream, fileNameMtr, modrinthApiKey));
 					if (success[0]) {
 						break;
 					}

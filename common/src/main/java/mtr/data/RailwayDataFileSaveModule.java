@@ -89,7 +89,7 @@ public class RailwayDataFileSaveModule extends RailwayDataModuleBase {
 		readMessagePackFromFile(railsPath, RailEntry::new, railEntry -> rails.put(railEntry.pos, railEntry.connections), true);
 		readMessagePackFromFile(signalBlocksPath, SignalBlocks.SignalBlock::new, signalBlocks.signalBlocks::add, true);
 
-		System.out.println("Minecraft Transit Railway data successfully loaded for " + world.dimension().location());
+		System.out.println("MTR data successfully loaded for " + world.dimension().location());
 		canAutoSave = true;
 		dataLoaded = true;
 	}
@@ -187,7 +187,7 @@ public class RailwayDataFileSaveModule extends RailwayDataModuleBase {
 				}));
 
 				if (!useReducedHash || filesWritten > 0 || filesDeleted > 0) {
-					System.out.println("Minecraft Transit Railway save complete for " + world.dimension().location() + " in " + (System.currentTimeMillis() - autoSaveStartMillis) / 1000 + " second(s)");
+					System.out.println("MTR save complete for " + world.dimension().location() + " in " + (System.currentTimeMillis() - autoSaveStartMillis) / 1000 + " second(s)");
 					if (filesWritten > 0) {
 						System.out.println("- Changed: " + filesWritten);
 					}

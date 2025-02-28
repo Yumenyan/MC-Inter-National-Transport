@@ -364,7 +364,7 @@ public class ResourcePackCreatorProperties implements IResourcePackCreatorProper
 			final FileOutputStream fileOutputStream = new FileOutputStream(String.format("%s/%s_%s.zip", resourcePackDirectory.toString(), customTrainId, ZonedDateTime.now(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("uuuu_MM_dd_HH_mm_ss"))));
 			final ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream);
 
-			writeToZip(zipOutputStream, "pack.mcmeta", "{\"pack\":{\"pack_format\":6,\"description\":\"Minecraft Transit Railway\\n" + getCustomTrainObject().get(CUSTOM_TRAINS_NAME).getAsString() + "\"}}");
+			writeToZip(zipOutputStream, "pack.mcmeta", "{\"pack\":{\"pack_format\":6,\"description\":\"MTR\\n" + getCustomTrainObject().get(CUSTOM_TRAINS_NAME).getAsString() + "\"}}");
 			writeToZip(zipOutputStream, String.format("assets/mtr/%s.json", CUSTOM_RESOURCES_ID), customResourcesObject.toString());
 			writeToZip(zipOutputStream, String.format("assets/mtr/%s/%s.bbmodel", customTrainId, customTrainId), modelObject.toString());
 			writeToZip(zipOutputStream, String.format("assets/mtr/%s/%s.json", customTrainId, customTrainId), propertiesObject.toString());
